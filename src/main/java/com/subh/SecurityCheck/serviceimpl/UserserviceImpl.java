@@ -2,6 +2,7 @@ package com.subh.SecurityCheck.serviceimpl;
 
 import com.subh.SecurityCheck.Entity.User;
 import com.subh.SecurityCheck.Repository.UserRepository;
+import com.subh.SecurityCheck.service.JWTService;
 import com.subh.SecurityCheck.service.Userservices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,9 @@ public class UserserviceImpl implements Userservices {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JWTService jwtService;
+
     @Override
     public User addUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -34,7 +38,7 @@ public class UserserviceImpl implements Userservices {
                                 user.getPassword())
                 );
         if(authenticate.isAuthenticated()){
-            return "66547487476578";
+            return jwtService.generateToken(user);
         }
         return "Failure";
     }
